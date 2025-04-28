@@ -1,0 +1,5 @@
+
+
+# host_vars/ansible_node1
+user_node: user_node1
+group_node: group_node1

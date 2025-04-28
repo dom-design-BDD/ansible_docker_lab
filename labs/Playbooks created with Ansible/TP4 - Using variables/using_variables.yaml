@@ -1,0 +1,36 @@
+---
+- name: Using_playbook
+  hosts: node 
+  become: yes
+
+  tasks:
+    - name: Création d'un répertoire nommé /app_data
+      file:
+         path: "{{ item }}"
+         state: directory
+      loop:
+        - /app_data
+        - /app_logs
+        - /app_config
+ 
+    # Créez un fichier host_vars pour un hôte spécifique (par exemple, host1.yml).
+    # Dans ce fichier, définissez des variables spécifiques à cet hôte, comme un nom d'utilisateur ou un groupe personnalisé.
+    # Utilisez ces variables dans le playbook
+    - name: Creation d'un groupe d'utilisateurs
+      user:
+        name: "{{ group_node }}"
+   
+    - name: Creation d'un utilisateur avec les hostsvars
+      user:
+        name: "{{ user_node }}"
+        home: "/home/{{ user_node }}"
+        groups: "{{ group_node }}"
+        append: yes
+   
+    # Utilisation des group_vars
+    - name: Apply Linux perms.
+      file:
+        path: "{{ default_folder }}/{{user_node }}"
+        owner: "{{ user_node }}"
+        group: "{{ group_node }}"
+        mode: "{{ default_perms }}"

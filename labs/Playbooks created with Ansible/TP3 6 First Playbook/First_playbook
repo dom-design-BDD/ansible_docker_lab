@@ -1,0 +1,41 @@
+
+
+# 1. Création d'un répertoire :
+# Créez un répertoire nommé /app_data sur les serveurs distants.
+# 2. Création d'un groupe d'utilisateurs :
+# Créez un groupe nommé app_group.
+# 3. Création d'un utilisateur :
+# Créez un utilisateur nommé app_user.
+# Assurez-vous que l'utilisateur a un répertoire home dans /home/app_user.
+# Ajoutez l'utilisateur app_user au groupe app_group.
+#
+---
+- name: First_playbook
+  hosts: node 
+  become: yes
+
+  tasks:
+    - name: Création d'un répertoire nommé /app_data
+      file:
+         path: /app_data
+         state: directory
+  
+    - name: Création d'un groupe d'utilisateurs
+      user:
+        name: app_group
+
+    - name: Création d'un utilisateur
+      user:
+        name: app_user
+        home: /home/app_user
+        groups: app_group
+        append: yes   
+
+    - name: Apply Linux perms.
+      file:
+        path: /app_data
+        owner: app_user
+        group: app_group
+        mode: '0744'
+		
+ansible-playbook -i inventory setup_app_environment.yml
