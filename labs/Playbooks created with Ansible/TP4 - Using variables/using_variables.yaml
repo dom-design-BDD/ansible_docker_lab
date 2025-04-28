@@ -1,5 +1,5 @@
 ---
-- name: Using_playbook
+- name: Using_playbook.yaml
   hosts: node 
   become: yes
 
