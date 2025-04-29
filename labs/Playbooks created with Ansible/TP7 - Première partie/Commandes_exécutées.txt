@@ -1,0 +1,23 @@
+* Installer le rôle depuis Ansible Galaxy:
+
+ansible-galaxy install geerlingguy.apache
+
+* install_apache.yml
+
+---
+- name: Installer et configurer Apache
+  hosts: all
+  become: true
+  roles:
+    - geerlingguy.apache
+  vars:
+    apache_listen_port: 8080
+
+ansible-playbook -i inventory install_apache.yml
+
+* Vérification: 
+ssh ansible_user@172.18.0.4
+ansible_user@2455d2997a09:~$ sudo service  apache2 status
+ * apache2 is running
+
+ 
