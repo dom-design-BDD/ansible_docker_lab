@@ -1,0 +1,59 @@
+
+* mkdir -p library
+
+* vi library/greet.py
+
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from ansible.module_utils.basic import AnsibleModule
+
+def main():
+    # Définir les arguments du module
+    module_args = dict(
+        name=dict(type='str', required=True)
+    )
+
+    # Initialiser le module Ansible
+    module = AnsibleModule(
+        argument_spec=module_args,
+        supports_check_mode=True
+    )
+
+    # Récupérer le paramètre 'name'
+    name = module.params['name']
+
+    # Construire le message de salutation
+    message = f"Bonjour, {name} !"
+
+    # Retourner le résultat au format JSON
+    module.exit_json(changed=False, message=message)
+
+if __name__ == '__main__':
+    main()
+
+* Playbook 'test_greet.yml'
+
+---
+- hosts: localhost
+  tasks:
+    - name: Saluer l'utilisateur
+      greet:
+        name: "Brahim"
+      register: greeting
+
+    - name: Afficher le message de salutation
+      debug:
+        var: greeting
+
+Execution:
+ansible-playbook -i inventory test_greet.yml
+
+TASK [Afficher le message de salutation] *************************************************************************************************************************************************************************
+ok: [localhost] => {
+    "greeting": {
+        "changed": false,
+        "failed": false,
+        "message": "Bonjour, Dom !"
+    }
+}
