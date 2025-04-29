@@ -1,0 +1,47 @@
+# Commandes executées:
+
+* Création du rôle 'nginx_role':
+ansible-galaxy init nginx_role
+
+* deploy_nginx.yml:
+cat deploy_nginx.yml:
+---
+# Définir les tâches
+# Créez un fichier tasks/main.yml pour définir les tâches suivantes :
+# - Installer Nginx.
+# - Démarrer et activer le service Nginx.
+# - Vérifier que Nginx est fonctionnel.
+#
+- name: Installer ngnix
+  hosts: all
+  become: true
+  roles:
+    - nginx_role
+
+
+* Detail du role nginx_role/tasks/main.yml
+cat nginx_role/tasks/main.yml
+
+---
+# tasks file for nginx_role
+#
+
+  - name: Installer Nginx
+    ansible.builtin.apt:
+      name: nginx
+      state: present
+      update_cache: yes
+
+  - name: Démarrer Nginx
+    ansible.builtin.service:
+      name: nginx
+      state: started
+
+  - name: Vérifier que Nginx est fonctionnel
+    ansible.builtin.shell: service nginx status
+    register: nginx_status
+    # changed_when: false
+
+  - name: Afficher l'état du service Nginx
+    ansible.builtin.debug:
+      msg: "Le service Nginx est {{ nginx_status.stdout }}"

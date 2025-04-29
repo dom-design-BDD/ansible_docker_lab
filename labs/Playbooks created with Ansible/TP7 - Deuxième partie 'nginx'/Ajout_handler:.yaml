@@ -1,0 +1,10 @@
+# Ajout d'un handler:
+
+cat nginx_role/handlers/main.yml
+---
+# handlers file for nginx_role
+#
+  - name: Redémarrer Nginx
+    ansible.builtin.service:
+      name: nginx
+      state: restarted
